@@ -205,3 +205,9 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Datasets
+notebooks/name.basics.tsv
+notebooks/name.basics.tsv.gz
+notebooks/title.basics.tsv.gz
+notebooks/title.basics.tsv
