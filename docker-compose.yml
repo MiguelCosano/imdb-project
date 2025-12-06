@@ -1,12 +1,30 @@
 services:
   db:
-    image: postgres:15
+    image: postgres:18
     container_name: imdb-db
     env_file: .env
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ingest:
+    build:
+      context: ./ingest_module
+      dockerfile: Dockerfile
+    container_name: imdb-ingest
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./ingest_module:/app
+      - /app/.venv 
 
 volumes:
   postgres_data:
