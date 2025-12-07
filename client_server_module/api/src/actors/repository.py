@@ -26,8 +26,7 @@ class ActorRepository:
             Actor.primary_name.ilike(f"%{name}%")
         ).order_by(
             nulls_last(Actor.birth_year),
-            nulls_last(Actor.primary_profession),
-            Actor.primary_name
+            nulls_last(Actor.primary_profession)
         ).limit(1)
         result = await self.session.execute(query)
         return result.scalar_one_or_none()

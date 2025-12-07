@@ -9,5 +9,5 @@ class ActorBase(BaseModel):
 
     nconst: str
     primary_name: str = Field(..., alias="primaryName")
-    birth_year: int = Field(None, alias="birthYear")
-    primary_profession: str = Field(None, alias="primaryProfession")
+    birth_year: Optional[int] = Field(None, alias="birthYear")
+    primary_profession: Optional[str] = Field(None, alias="primaryProfession")

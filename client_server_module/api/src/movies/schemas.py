@@ -9,5 +9,5 @@ class MovieBase(BaseModel):
 
     tconst: str
     primary_title: str = Field(..., alias="primaryTitle")
-    original_title: str = Field(None, alias="originalTitle")
-    genres: str = Field(None, alias="genres")
+    original_title: Optional[str] = Field(None, alias="originalTitle")
+    genres: Optional[str] = Field(None, alias="genres")

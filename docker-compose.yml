@@ -28,7 +28,7 @@ services:
   
   api:
     build:
-      context: ./api
+      context: ./client_server_module/api
       dockerfile: Dockerfile
     container_name: imdb-api
     env_file: .env
