@@ -1,16 +1,13 @@
 FROM python:3.11-slim
 
+RUN pip install --no-cache-dir uv
+
 WORKDIR /app
 
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
+COPY pyproject.toml .
 
-COPY pyproject.toml uv.lock* ./
+RUN uv pip install --system --no-cache .
 
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev
+COPY . .
 
-COPY app/ ./app/
-
-ENV PATH="/app/.venv/bin:$PATH"
-
-CMD ["python", "-m", "app.main"]
+CMD ["python", "main.py"]

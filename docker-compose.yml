@@ -23,8 +23,7 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - ./ingest_module:/app
-      - /app/.venv
+      - imdb_data:/app/data
   
   api:
     build:
@@ -45,3 +44,4 @@ services:
 
 volumes:
   postgres_data:
+  imdb_data:

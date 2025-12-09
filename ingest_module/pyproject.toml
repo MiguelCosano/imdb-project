@@ -1,7 +1,7 @@
 [project]
 name = "ingest-module"
 version = "0.1.0"
-description = "Add your description here"
+description = "Python app to ingest data from the IMDb datasource and store it in a Postgresql database"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
@@ -11,4 +11,6 @@ dependencies = [
     "sqlalchemy>=2.0.0",
     "python-dateutil>=2.8.0",
     "psycopg2-binary>=2.9.0",
+    "pytest>=9.0.2",
+    "alive-progress>=3.3.0",
 ]

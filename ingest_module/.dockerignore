@@ -1,0 +1,14 @@
+**/.git
+**/.gitignore
+**/.vscode
+**/coverage
+**/.aws
+**/.ssh
+Dockerfile
+README.md
+docker-compose.yml
+**/.DS_Store
+**/venv
+name.basics.tsv.gz
+title.basics.tsv.gz
+/data/*
