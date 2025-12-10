@@ -21,6 +21,11 @@ class DataTransformer:
                 dtype=dataset_config.dtype_map
             )):
                 chunk = chunk.where(pd.notnull(chunk), None)
+
+                if 'deathYear' in chunk.columns:
+                    chunk['isDead'] = chunk['deathYear'].notna()
+                    chunk = chunk.drop(columns=['deathYear'])
+
                 yield i, chunk
                 
         except FileNotFoundError as e:

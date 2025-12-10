@@ -6,6 +6,9 @@ from src.actors.service import ActorService
 from src.actors.repository import ActorRepository
 from src.actors.schemas import ActorBase
 from core.database import get_session
+from core.logger import get_logger
+
+logger = get_logger(__name__)
 
 router = APIRouter(prefix="/actors", tags=["actors"])
 
@@ -16,24 +19,13 @@ def get_actor_service(session: AsyncSession = Depends(get_session)) -> ActorServ
 
 @router.get("/search")
 async def search_actors(
-    name: Annotated[str, Query(min_length=1, description="Nombre del actor a buscar")],
+    name: Annotated[str, Query(min_length=1, description="Name of the actor to search")],
     service: ActorService = Depends(get_actor_service)
 ) -> ActorBase:
-    """Search Actor by Name"""
-    actor = await service.get_actor_by_name(name)
-    return actor
-
-@router.get("/{actor_id}", response_model= ActorBase)
-async def get_actor_by_id(
-    actor_id: str,
-    service: ActorService = Depends(get_actor_service),
-) -> ActorBase:
-    """Get Actor by ID."""
-    logger.debug(f"Fetching hero {actor_id}")
+    """Search Actor by name"""
     try:
-        actor = await service.get_actor_by_id(actor_id)
-        logger.info(f"Retrieved actor {actor_id}")
+        actor = await service.get_actor_by_name(name)
         return actor
     except Exception as e:
-        logger.error(f"Failed to fetch actor {actor_id}: {str(e)}")
+        logger.error(f"Error searching actor by name '{name}': {e}")
         raise

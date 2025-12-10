@@ -11,3 +11,4 @@ class ActorBase(BaseModel):
     primary_name: str = Field(..., alias="primaryName")
     birth_year: Optional[int] = Field(None, alias="birthYear")
     primary_profession: Optional[str] = Field(None, alias="primaryProfession")
+    is_dead: Optional[bool] = Field(None, alias="isDead")

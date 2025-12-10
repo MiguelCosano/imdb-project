@@ -11,8 +11,8 @@ class DatasetConfig:
 ACTORS_CONFIG = DatasetConfig(
     filename="name.basics.tsv.gz",
     table_name="actors",
-    columns=["nconst", "primaryName", "birthYear", "primaryProfession"],
-    dtype_map={'nconst': str, 'primaryName': str, 'birthYear': 'Int64', 'primaryProfession': str}
+    columns=["nconst", "primaryName", "birthYear", "deathYear", "primaryProfession"],
+    dtype_map={'nconst': str, 'primaryName': str, 'birthYear': 'Int64', 'deathYear': 'Int64', 'primaryProfession': str}
 )
 
 MOVIES_CONFIG = DatasetConfig(
