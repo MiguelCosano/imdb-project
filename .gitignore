@@ -213,3 +213,5 @@ title.basics.tsv
 title.basics.tsv.gz
 
 *.DS_Store
+
+notebooks
