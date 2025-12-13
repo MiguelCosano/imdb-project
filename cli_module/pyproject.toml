@@ -10,9 +10,13 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "click>=8.3.1",
+    "pydantic>=2.12.5",
     "python-dotenv>=1.0",
     "requests>=2.32.5",
 ]
 
 [project.scripts]
-imdb = "imdb:cli"
+imdb = "imdb_cli.main:cli"
+
+[tool.hatch.build.targets.wheel]
+packages = ["imdb_cli"]
