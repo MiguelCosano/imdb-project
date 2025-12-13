@@ -7,17 +7,17 @@ from core.logger import setup_logging, get_logger
 
 setup_logging()
 
-app = FastAPI(
-    title= settings.PROJECT_NAME
-)
+app = FastAPI(title=settings.PROJECT_NAME)
 
 app.include_router(actors_router)
 app.include_router(movies_router)
+
 
 @app.get("/")
 def read_root():
     return {"message": "Hello from IMDB API"}
 
+
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy"}
+    return {"status": "ok"}

@@ -6,6 +6,7 @@ import os
 path.append(os.path.realpath("../../"))
 load_dotenv()
 
+
 class Settings(BaseSettings):
     """Application settings."""
 
@@ -16,5 +17,6 @@ class Settings(BaseSettings):
         env_file=".env",
         env_file_encoding="utf-8",
     )
+
 
 settings = Settings()

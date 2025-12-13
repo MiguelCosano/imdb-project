@@ -17,15 +17,18 @@ def get_actor_service(session: AsyncSession = Depends(get_session)) -> ActorServ
     repository = ActorRepository(session)
     return ActorService(repository)
 
+
 @router.get("/search")
 async def search_actors(
-    name: Annotated[str, Query(min_length=1, description="Name of the actor to search")],
-    service: ActorService = Depends(get_actor_service)
-) -> ActorBase:
+    name: Annotated[
+        str, Query(min_length=1, description="Name of the actor to search")
+    ],
+    service: ActorService = Depends(get_actor_service),
+) -> list[ActorBase]:
     """Search Actor by name"""
     try:
-        actor = await service.get_actor_by_name(name)
-        return actor
+        actors = await service.get_actor_by_name(name)
+        return actors
     except Exception as e:
         logger.error(f"Error searching actor by name '{name}': {e}")
         raise
