@@ -215,3 +215,4 @@ title.basics.tsv.gz
 *.DS_Store
 
 notebooks
+data/

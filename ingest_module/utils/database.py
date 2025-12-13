@@ -1,7 +1,9 @@
-"""Database utilities"""
 import os
 import logging
 from sqlalchemy import create_engine, Engine
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
 
 def get_database_engine() -> Engine:
     """Create database engine with connection pooling"""
