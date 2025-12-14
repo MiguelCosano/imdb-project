@@ -48,6 +48,36 @@ server_module/
 └──README.md               # This file
 ```
 
+## Architecture
+
+### Layered Structure
+
+The server uses a clean layered architecture:
+
+1. **Routes Layer** (`routes.py`) - HTTP endpoint definitions
+2. **Service Layer** (`service.py`) - Business logic
+3. **Repository Layer** (`repository.py`) - Database queries
+4. **Models Layer** (`models.py`) - SQLAlchemy ORM models
+5. **Schemas Layer** (`schemas.py`) - Request/response validation
+
+### Database Connection
+
+- Async SQLAlchemy with AsyncPG for non-blocking database operations
+- Connection pooling managed by SQLAlchemy
+- Single database session per request (FastAPI dependency injection)
+
+### Full-Text Search
+
+For the search, in an initial instance we chose to query directly on the column using `LIKE` queries, but the response times were quite high (around 1.5 seconds). Therefore, after some investigation, we decided to add a column after the ETL process that transforms the values of `primary_title` into a `tsvector`, and additionally add `GIN indexes`. This resulted in a considerable improvement in response time, reducing it to under 100 ms, with further improvements after making recurrent requests thanks to the indexes.
+
+#### Before optimization
+
+![System Architecture](../docs/before_optimization.png)
+
+#### After optimization
+
+![System Architecture](../docs/after_optimization.png)
+
 ## Installation
 
 ### Recommended: Start with Docker Compose
@@ -96,7 +126,7 @@ Verify: `uv --version`
 #### Step 2: Create Virtual Environment
 
 ```bash
-cd /path/to/imdb-project/server_module
+cd /path/to/imdb-project
 uv venv .venv
 source .venv/bin/activate  # macOS/Linux
 # or
@@ -106,15 +136,15 @@ source .venv/bin/activate  # macOS/Linux
 #### Step 3: Install Server Module
 
 ```bash
-uv pip install -e .
+uv pip install -e ./server_module/
 ```
 
 #### Step 4: Configure Database
 
-In the `.env` file in the root of the project, configure the API database URL to point correctly to the database:
+In the `.env` file in the root of the project, configure the API database URL:
 
 ```env
-API_DATABASE_URL=postgresql+asyncpg://imdb_user:imdb_pass@localhost:5432/imdb  # db changed for localhost
+API_DATABASE_URL=postgresql+asyncpg://imdb_user:imdb_pass@localhost:5432/imdb
 ```
 
 #### Step 5: Run the Server
@@ -132,7 +162,7 @@ If you prefer standard pip:
 #### Step 1: Create Virtual Environment
 
 ```bash
-cd /path/to/imdb-project/server_module
+cd /path/to/imdb-project
 python -m venv .venv
 source .venv/bin/activate  # macOS/Linux
 # or
@@ -142,7 +172,7 @@ source .venv/bin/activate  # macOS/Linux
 #### Step 2: Install Server Module
 
 ```bash
-python -m pip install -e .
+python -m pip install -e ./server_module/
 ```
 
 #### Step 3: Configure Database
@@ -183,6 +213,17 @@ Visit `http://127.0.0.1:8000/docs` for Swagger UI or `http://127.0.0.1:8000/redo
   - **Example**: `GET /movies/search?title=Inception`
   - **Response**: List of matching movies with genres
 
+## Dependencies
+
+- `fastapi>=0.109.0` - Modern web framework
+- `uvicorn>=0.27.0` - ASGI server
+- `sqlalchemy>=2.0.0` - Database ORM
+- `asyncpg>=0.29.0` - Async PostgreSQL driver
+- `pydantic>=2.0.0` - Data validation
+- `python-dotenv>=1.0.0` - Environment variables
+- `psycopg2-binary>=2.9.0` - PostgreSQL adapter
+- `pytest>=9.0.2` - Testing framework
+
 ## Testing
 
 Unit tests are provided in the `tests/` directory:
@@ -207,47 +248,6 @@ pytest tests/test_movies.py
 - `tests/test_movies.py` - Movie repository unit tests
   - `TestMovieRepository.test_get_by_title_returns_movies` - Tests successful movie search
   - `TestMovieRepository.test_get_by_title_not_found_raises_404` - Tests 404 error handling
-
-## Dependencies
-
-- `fastapi>=0.109.0` - Modern web framework
-- `uvicorn>=0.27.0` - ASGI server
-- `sqlalchemy>=2.0.0` - Database ORM
-- `asyncpg>=0.29.0` - Async PostgreSQL driver
-- `pydantic>=2.0.0` - Data validation
-- `python-dotenv>=1.0.0` - Environment variables
-- `psycopg2-binary>=2.9.0` - PostgreSQL adapter
-- `pytest>=9.0.2` - Testing framework
-
-## Architecture
-
-### Layered Structure
-
-The server uses a clean layered architecture:
-
-1. **Routes Layer** (`routes.py`) - HTTP endpoint definitions
-2. **Service Layer** (`service.py`) - Business logic
-3. **Repository Layer** (`repository.py`) - Database queries
-4. **Models Layer** (`models.py`) - SQLAlchemy ORM models
-5. **Schemas Layer** (`schemas.py`) - Request/response validation
-
-### Database Connection
-
-- Async SQLAlchemy with AsyncPG for non-blocking database operations
-- Connection pooling managed by SQLAlchemy
-- Single database session per request (FastAPI dependency injection)
-
-### Full-Text Search
-
-For the search, in an initial instance we chose to query directly on the column using `LIKE` queries, but the response times were quite high (around 1.5 seconds). Therefore, after some investigation, we decided to add a column after the ETL process that transforms the values of `primary_title` into a `tsvector`, and additionally add `GIN indexes`. This resulted in a considerable improvement in response time, reducing it to under 100 ms, with further improvements after making recurrent requests thanks to the indexes.
-
-#### Before optimization
-
-![System Architecture](../docs/before_optimization.png)
-
-#### After optimization
-
-![System Architecture](../docs/after_optimization.png)
 
 ## Performance Notes
 

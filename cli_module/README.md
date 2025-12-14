@@ -35,106 +35,75 @@ cli_module/
 ### Prerequisites
 
 - Python 3.11 or higher
-- The other modules should have been launched. Check main Readme for more info.
+- The other modules should have been launched. Check main README for more info.
 
-### Recommended: Install as a Python Package with uv
+### Option 1: Setup with uv (Recommended)
+
+uv is a fast, modern Python package manager.
 
 #### Step 1: Install uv (if not already installed)
 
-`uv` is a fast, modern Python package manager. Install it:
-
 ```bash
-# On macOS or Linux
+# macOS/Linux
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# On Windows (PowerShell)
+# Windows (PowerShell)
 powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 
-# Or via package managers:
-# macOS: brew install uv
-# Ubuntu/Debian: curl -LsSf https://astral.sh/uv/install.sh | sh
+# Or via Homebrew (macOS)
+brew install uv
 ```
 
-Verify installation:
-```bash
-uv --version
-```
+Verify: `uv --version`
 
-#### Step 2: Create Virtual Environment with uv
-
-From the project root directory:
+#### Step 2: Create Virtual Environment
 
 ```bash
 cd /path/to/imdb-project
-
-# Create virtual environment
 uv venv .venv
+source .venv/bin/activate  # macOS/Linux
+# or
+.venv\Scripts\activate.bat  # Windows
 ```
 
-#### Step 3: Activate Virtual Environment
+#### Step 3: Install CLI Module
 
 ```bash
-# On macOS/Linux
-source .venv/bin/activate
-
-# On Windows (PowerShell)
-.venv\Scripts\Activate.ps1
-
-# On Windows (Command Prompt)
-.venv\Scripts\activate.bat
-```
-
-You should see `(.venv)` prefix in your terminal prompt when activated.
-
-#### Step 4: Install the CLI Package
-
-With the virtual environment activated:
-
-```bash
-# Method 1: Using uv (Recommended - faster)
 uv pip install -e ./cli_module/
-
-# Method 2: Using standard pip
-python -m pip install -e ./cli_module/
 ```
 
-#### Step 5: Verify Installation
+#### Step 4: Verify Installation
 
 ```bash
 imdb --help
 ```
 
-You should see the CLI help message with available commands.
+### Option 2: Setup with Python (Standard)
 
-### Alternative Method 1: Using pip directly (Without uv)
+If you prefer standard pip:
 
-If you prefer to use only pip:
+#### Step 1: Create Virtual Environment
 
 ```bash
 cd /path/to/imdb-project
-
-# Create virtual environment with Python
 python -m venv .venv
-
-# Activate it
 source .venv/bin/activate  # macOS/Linux
 # or
 .venv\Scripts\activate.bat  # Windows
+```
 
-# Install package
+#### Step 2: Install CLI Module
+
+```bash
 python -m pip install -e ./cli_module/
 ```
 
-### Alternative Method 2: Run without Installation
-
-Execute directly from  cli_module/imdb_cli/  (no installation needed):
+#### Step 3: Verify Installation
 
 ```bash
-cd imdb-project/cli_module
-# with venv active
-uv run imdb_cli/main.py actor "Tom Hanks"
-# or: python -m imdb_cli.main actor "Tom Hanks"
+imdb --help
 ```
+
 
 ### Configuration
 
