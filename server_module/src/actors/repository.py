@@ -17,24 +17,12 @@ class ActorRepository:
             (func.lower(Actor.primary_name) == func.lower(name), 0), else_=1
         )
 
-        has_nulls = case(
-            (
-                or_(
-                    Actor.primary_name.is_(None),
-                    Actor.birth_year.is_(None),
-                    Actor.primary_profession.is_(None),
-                ),
-                1
-            ),
-            else_=0,
-        )
         query = (
             select(Actor)
             .where(Actor.search_vector.op("@@")(ts_query))
             .order_by(
                 exact_match.asc(),
-                has_nulls.asc(),
-                func.length(Actor.primary_name).asc(),
+                func.length(Actor.primary_name).asc()
             )
         )
 

@@ -17,24 +17,11 @@ class MovieRepository:
             else_=1,
         )
 
-        has_nulls = case(
-            (
-                or_(
-                    Movie.primary_title.is_(None),
-                    Movie.original_title.is_(None),
-                    Movie.genres.is_(None),
-                ),
-                1,
-            ),
-            else_=0,
-        )
-
         query = (
             select(Movie)
             .where(Movie.search_vector.op("@@")(ts_query))
             .order_by(
                 exact_match.asc(),
-                has_nulls.asc(),
                 func.length(Movie.primary_title).asc(),
             )
         )
