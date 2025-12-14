@@ -9,12 +9,9 @@ from utils.metadata import load_metadata, save_metadata, should_reload
 class DataExtractor:
     """Extract raw data from IMDb using pandas built-in URL streaming."""
 
-    def __init__(self, base_url: str = IMDB_URL):
-        self.base_url = base_url
-
     def should_download(self, filename: str) -> bool:
         """Check if file needs to be downloaded based on ETag comparison"""
-        url = f"{self.base_url}{filename}"
+        url = f"{IMDB_URL}{filename}"
         stored_metadata = load_metadata()
         logging.info(f"Checking for updates to {filename}")
 
@@ -35,7 +32,7 @@ class DataExtractor:
             pd.DataFrame chunks from the TSV file
 
         """
-        url = f"{self.base_url}{filename}"
+        url = f"{IMDB_URL}{filename}"
 
         logging.info(f"Streaming {filename} from {url}")
 
