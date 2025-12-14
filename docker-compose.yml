@@ -30,7 +30,9 @@ services:
       context: ./server_module
       dockerfile: Dockerfile
     container_name: ${API_CONTAINER_NAME}
-    env_file: .env
+    environment:
+      API_CONTAINER_NAME: ${API_CONTAINER_NAME}
+      API_DATABASE_URL: ${API_DATABASE_URL}
     ports:
       - ${API_EXPOSED_PORTS}
     depends_on:

@@ -7,7 +7,7 @@ from core.logger import setup_logging, get_logger
 
 setup_logging()
 
-app = FastAPI(title=settings.PROJECT_NAME)
+app = FastAPI(title=settings.API_CONTAINER_NAME)
 
 app.include_router(actors_router)
 app.include_router(movies_router)
