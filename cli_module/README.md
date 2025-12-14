@@ -1,6 +1,28 @@
 ## IMDB CLI
 A command-line interface built with Click for querying movies and actors from the IMDb Data API. Simple, fast, and beautifully formatted.
 
+## Project Structure
+
+```
+cli_module/
+├── README.md               # This file
+├── imdb_cli/
+│   ├── __init__.py
+│   ├── formatters.py       # Output formatting utilities
+│   ├── main.py             # CLI entry point and commands
+│   ├── models.py           # Pydantic models for API responses
+│   └── __pycache__/
+├── test/
+│   ├── __init__.py
+│   ├── test_cli_actor.py   # Actor command unit tests
+│   ├── test_cli_movie.py   # Movie command unit tests
+│   ├── test_formatter.py   # Formatter utility tests
+│   └── __pycache__/
+├── pyproject.toml          # Dependencies and metadata
+├── uv.lock                 # Dependency lock file
+└── __pycache__/
+```
+
 ## Installation
 
 ### Prerequisites
@@ -36,7 +58,7 @@ uv --version
 From the project root directory:
 
 ```bash
-cd /path/to/imdb-project/cli_module
+cd /path/to/imdb-project
 
 # Create virtual environment
 uv venv .venv
@@ -103,13 +125,14 @@ Execute directly from  cli_module/imdb_cli/  (no installation needed):
 ```bash
 cd imdb-project/cli_module
 # with venv active
-uv run src/imdb_cli/main.py actor "Tom Hanks"
+uv run imdb_cli/main.py actor "Tom Hanks"
 # or: python -m imdb_cli.main actor "Tom Hanks"
 ```
 
 ### Configuration
 
-You need to have the .env file properly configured in the root of the global project as it is said in the main README.md
+You need to have the `.env` file properly configured in the root of the project as specified in the main README.md
+
 ## Usage
 
 The CLI provides two main commands for searching the IMDb dataset:
@@ -199,7 +222,7 @@ The CLI requires the following Python packages (automatically installed with pip
 - `pydantic>=2.12.5` - Data validation
 - `python-dotenv>=1.0` - Environment variable management
 - `requests>=2.32.5` - HTTP requests
-- `pytest>=9.0.2` - Testing
+- `pytest>=9.0.2` - Testing framework
 
 ## Features
 
@@ -208,8 +231,21 @@ The CLI requires the following Python packages (automatically installed with pip
 - **Error handling** - Clear error messages for connection issues, timeouts, and API errors
 - **Beautiful formatting** - Human-readable output with contextual information
 
-## Tests
-These are the unit test using `Pytest` that has been implemented:
+## Testing
+
+Unit tests are provided in the `test/` directory using pytest:
+
+### Run Tests
+
+```bash
+# Run all tests
+pytest
+
+# Run specific test file
+pytest test/test_cli_actor.py
+pytest test/test_cli_movie.py
+pytest test/test_formatter.py
+```
 
 ### Actor Command Tests
 - `test_invalid_limit_validation` - Validates invalid limit values (0, -1, -500)
