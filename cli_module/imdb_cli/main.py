@@ -115,6 +115,7 @@ def actor(name, limit):
 
     except Exception as e:
         click.echo(f"Unexpected error: {e}", err=True)
+        raise click.Abort()
 
 
 @cli.command()
@@ -192,6 +193,7 @@ def movie(title, limit):
 
     except Exception as e:
         click.echo(f"Unexpected error: {e}", err=True)
+        raise click.Abort()
 
 
 if __name__ == "__main__":

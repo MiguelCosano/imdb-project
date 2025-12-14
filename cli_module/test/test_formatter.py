@@ -38,14 +38,15 @@ class TestFormatGenres:
 
     def test_format_genres_multiple(self):
         """Test formatting multiple genres."""
-        result = format_genres("Drama,Action,Thriller")
-        assert "a Drama" in result
-        assert "an Action" in result
-        assert "a Thriller" in result
+        result = format_genres("Animation,Comedy,Family")
+        print (result)
+        assert "an Animation" in result
+        assert "a Comedy" in result
+        assert "a Family" in result
 
     @pytest.mark.parametrize("genres", [None, ""])
     def test_format_genres_none_or_empty(self, genres):
-        """Test formatting None value."""
+        """Test formatting None and Empty value."""
         result = format_genres(genres)
         print(result)
         assert "an unknown genre" in result.lower()

@@ -199,6 +199,7 @@ The CLI requires the following Python packages (automatically installed with pip
 - `pydantic>=2.12.5` - Data validation
 - `python-dotenv>=1.0` - Environment variable management
 - `requests>=2.32.5` - HTTP requests
+- `pytest>=9.0.2` - Testing
 
 ## Features
 
@@ -206,6 +207,52 @@ The CLI requires the following Python packages (automatically installed with pip
 - **Flexible limits** - Display 1, 5, 10, or more results
 - **Error handling** - Clear error messages for connection issues, timeouts, and API errors
 - **Beautiful formatting** - Human-readable output with contextual information
+
+## Tests
+These are the unit test using `Pytest` that has been implemented:
+
+### Actor Command Tests
+- `test_invalid_limit_validation` - Validates invalid limit values (0, -1, -500)
+- `test_no_actors_found` - Handles empty API response
+- `test_single_actor_success` - Successful single actor query
+- `test_multiple_actors_with_limit` - Multiple actors with limit parameter
+- `test_http_404_error` - HTTP 404 error handling
+- `test_http_500_error` - HTTP 500 error handling
+- `test_connection_error` - Connection error handling
+- `test_timeout_error` - Timeout error handling
+- `test_generic_request_exception` - Generic request exception handling
+- `test_generic_exception` - Generic exception handling
+
+### Movie Command Tests
+- `test_invalid_movie_limit` - Validates invalid limit values (0, -1, -500)
+- `test_no_movies_found` - Handles empty movie response
+- `test_single_movie_success` - Successful single movie query
+- `test_multiple_movies_with_limit` - Multiple movies with limit parameter
+- `test_http_404_error` - HTTP 404 error handling
+- `test_http_500_error` - HTTP 500 error handling
+- `test_connection_error` - Connection error handling
+- `test_timeout_error` - Timeout error handling
+- `test_generic_request_exception` - Generic request exception handling
+- `test_generic_exception` - Generic exception handling
+
+### Format Professions Tests
+- `test_format_professions_single_actor` - Formats single profession
+- `test_format_professions_multiple` - Formats multiple professions
+- `test_format_professions_none_or_empty` - Handles None and empty values
+
+### Format Genres Tests
+- `test_format_genres_single` - Formats single genre
+- `test_format_genres_multiple` - Formats multiple genres
+- `test_format_genres_none_or_empty` - Handles None and empty values
+
+### Is Dead or Alive Tests
+- `test_is_dead` - Returns 'had' for deceased persons
+- `test_is_alive` - Returns 'has' for alive persons
+- `test_is_dead_none` - Handles None value
+
+### Plural S Tests
+- `test_plural_s_singular` - Returns empty string for count of 1
+- `test_plural_s_plural_or_zero` - Returns 's' for counts values (0, 2, 100)
 
 ## Troubleshooting
 
