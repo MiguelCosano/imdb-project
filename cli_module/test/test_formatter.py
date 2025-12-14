@@ -22,14 +22,10 @@ class TestFormatProfessions:
         assert "a director" in result.lower()
         assert "a producer" in result.lower()
 
-    def test_format_professions_none(self):
-        """Test formatting None value."""
-        result = format_professions(None)
-        assert "unknown" in result.lower()
-
-    def test_format_professions_empty_string(self):
-        """Test formatting empty string."""
-        result = format_professions("")
+    @pytest.mark.parametrize("professions", [None, ""])
+    def test_format_professions_none_or_empty(self, professions):
+        """Test formatting None and Empty value."""
+        result = format_professions(professions)
         assert "unknown" in result.lower()
 
 
@@ -48,15 +44,12 @@ class TestFormatGenres:
         assert "an Action" in result
         assert "a Thriller" in result
 
-    def test_format_genres_none(self):
+    @pytest.mark.parametrize("genres", [None, ""])
+    def test_format_genres_none_or_empty(self, genres):
         """Test formatting None value."""
-        result = format_genres(None)
-        assert isinstance(result, str)
-
-    def test_format_genres_empty_string(self):
-        """Test formatting empty string."""
-        result = format_genres("")
-        assert isinstance(result, str)
+        result = format_genres(genres)
+        print(result)
+        assert "an unknown genre" in result.lower()
 
 
 class TestIsDeadOrAlive:
@@ -86,12 +79,8 @@ class TestPluralS:
         result = plural_s(1)
         assert result == ""
 
-    def test_plural_s_plural(self):
+    @pytest.mark.parametrize("limit", [2, 100, 0])
+    def test_plural_s_plural_or_zero(self, limit):
         """Test plural count returns 's'."""
-        result = plural_s(2)
-        assert result == "s"
-
-    def test_plural_s_zero(self):
-        """Test zero count returns 's'."""
-        result = plural_s(0)
+        result = plural_s(limit)
         assert result == "s"

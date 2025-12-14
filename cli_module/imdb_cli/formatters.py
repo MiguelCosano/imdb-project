@@ -77,7 +77,7 @@ def format_genres(genres: str | None) -> str:
     Example: "Documentary,Short" -> "a Documentary and a Short"
     """
     if not genres:
-        return "an unknow genre"
+        return "an unknown genre"
 
     def add_article(genre: str) -> str:
         vowels = ("a", "e", "i", "o", "u")
@@ -89,7 +89,7 @@ def format_genres(genres: str | None) -> str:
     formatted = [add_article(g) for g in genres_list]
 
     if len(formatted) == 0:
-        return "unknown genre"
+        return "an unknown genre"
     elif len(formatted) == 1:
         return formatted[0]
     elif len(formatted) == 2:
