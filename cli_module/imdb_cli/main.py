@@ -76,7 +76,7 @@ def actor(name, limit):
             click.echo(f"Actor named '{name}' not found.", err=True)
             return
 
-        if number_of_actors < 1:
+        if limit < 1:
             click.echo("Error: Result number must be at least 1.", err=True)
             return
 
@@ -88,7 +88,7 @@ def actor(name, limit):
         for i, actor in enumerate(actor_data.actors[:limit], 1):
             click.echo(
                 f"{i}. {actor.primary_name} was born in {actor.birth_year} and"
-                f" he {is_dead_or_alive(actor.is_dead)} {format_professions(actor.primary_profession)}."
+                f" {is_dead_or_alive(actor.is_dead)} the following {format_professions(actor.primary_profession)}."
             )
 
     except requests.exceptions.HTTPError as e:

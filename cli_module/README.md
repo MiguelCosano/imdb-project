@@ -130,24 +130,24 @@ imdb actor "Bruce Lee"
 # Response
 Found 1 actor.
 Showing 1 actor.
-1. Bruce Lee was born in 1940 and he was an actor, a writer, and in miscellaneous roles.
+1. Bruce Lee was born in 1940 and had the following professions: actor, writer, and miscellaneous.
 
 # Show top 5 results
 imdb actor "Robert" --limit 5
 # Response
 Found 4610 actors.
 Showing 5 actors.
-1. Robert P. was born in 1982 and he is an actor.
-2. Robert An was born in 2003 and he is an actor.
-3. Robert Ray was born in 1978 and he was in archive footage.
-4. Robert Joy was born in 1951 and he is an actor, a writer, and a composer.
-5. Robert Lee was born in 1957 and he is in miscellaneous roles, an actor, and in archive footage.
+1. Robert P. was born in 1982 and has the following profession: actor.
+2. Robert An was born in 2003 and has the following profession: actor.
+3. Robert Ray was born in 1978 and had the following profession: archive footage.
+4. Robert Joy was born in 1951 and has the following professions: actor, writer, and composer.
+5. Robert Lee was born in 1957 and has the following professions: miscellaneous, actor, and archive footage.
 ```
 
 **Output includes:**
 - Actor name
 - Birth year
-- Life status with tense: “is” (alive) or “was” (deceased) 
+- Life status with tense: "has" (alive) or had (deceased) 
 - Primary professions
 
 ### Search for Movies

@@ -18,15 +18,14 @@ class TestFormatProfessions:
     def test_format_professions_multiple(self):
         """Test formatting multiple professions."""
         result = format_professions("actor,director,producer")
-        assert "an actor" in result.lower()
-        assert "a director" in result.lower()
-        assert "a producer" in result.lower()
+        assert "professions: actor, director, and producer" in result.lower()
 
     @pytest.mark.parametrize("professions", [None, ""])
     def test_format_professions_none_or_empty(self, professions):
         """Test formatting None and Empty value."""
         result = format_professions(professions)
-        assert "unknown" in result.lower()
+        print(result)
+        assert "profession: unknown" in result.lower()
 
 
 class TestFormatGenres:
@@ -58,17 +57,17 @@ class TestIsDeadOrAlive:
     def test_is_dead(self):
         """Test person is dead."""
         result = is_dead_or_alive(True)
-        assert result == "was"
+        assert result == "had"
 
     def test_is_alive(self):
         """Test person is alive."""
         result = is_dead_or_alive(False)
-        assert result == "is"
+        assert result == "has"
 
     def test_is_dead_none(self):
         """Test with None value."""
         result = is_dead_or_alive(None)
-        assert result == "is"
+        assert result == "has"
 
 
 class TestPluralS:
