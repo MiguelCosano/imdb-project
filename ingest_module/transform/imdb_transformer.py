@@ -1,30 +1,11 @@
 import logging
 import pandas as pd
 from typing import Iterator
-from utils.datasets import DatasetConfig
+from utils.datasets_config import DatasetConfig
 
 
 class DataTransformer:
     """Transform and clean IMDb data"""
-
-    def __init__(self):
-        self.stats = {}
-
-        self.column_mapping = {
-            "actors": {
-                "nconst": "nconst",
-                "primaryName": "primary_name",
-                "birthYear": "birth_year",
-                "deathYear": "death_year",
-                "primaryProfession": "primary_profession",
-            },
-            "movies": {
-                "tconst": "tconst",
-                "primaryTitle": "primary_title",
-                "originalTitle": "original_title",
-                "genres": "genres",
-            },
-        }
 
     def transform_chunks(
         self, raw_chunks: Iterator[pd.DataFrame], dataset_config: DatasetConfig
@@ -42,6 +23,7 @@ class DataTransformer:
             Tuple of (chunk_number, transformed_dataframe)
         """
         table_name = dataset_config.table_name
+        mapping = dataset_config.mapping
 
         for i, chunk in enumerate(raw_chunks):
 
@@ -57,8 +39,7 @@ class DataTransformer:
 
             chunk = self._filter_critical_nulls(chunk, table_name)
 
-            if table_name in self.column_mapping:
-                chunk = chunk.rename(columns=self.column_mapping[table_name])
+            chunk = chunk.rename(columns=mapping)
 
             chunk = chunk.where(pd.notnull(chunk), None)
 

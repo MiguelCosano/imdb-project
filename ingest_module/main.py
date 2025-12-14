@@ -3,7 +3,7 @@ from extract.imdb_extractor import DataExtractor
 from transform.imdb_transformer import DataTransformer
 from load.imdb_loader import DatabaseLoader
 from utils.database import get_database_engine
-from utils.datasets import DatasetConfig,DATASETS
+from utils.datasets_config import DatasetConfig,DATASETS
 
 logging.basicConfig(
     level=logging.INFO,

@@ -2,7 +2,7 @@ import logging
 import csv
 from io import StringIO
 from sqlalchemy import Engine
-from utils.datasets import DatasetConfig
+from utils.datasets_config import DatasetConfig
 from alive_progress import alive_bar
 import pandas as pd
 from typing import Iterator
