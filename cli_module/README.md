@@ -1,6 +1,13 @@
 ## IMDB CLI
 A command-line interface built with Click for querying movies and actors from the IMDb Data API. Simple, fast, and beautifully formatted.
 
+## Features
+
+- **Fast searches** - Queries the IMDb API with optimized endpoints
+- **Flexible limits** - Display a custom number of results
+- **Error handling** - Clear error messages for connection issues, timeouts, and API errors
+- **Beautiful formatting** - Human-readable output with contextual information
+
 ## Project Structure
 
 ```
@@ -223,13 +230,6 @@ The CLI requires the following Python packages (automatically installed with pip
 - `python-dotenv>=1.0` - Environment variable management
 - `requests>=2.32.5` - HTTP requests
 - `pytest>=9.0.2` - Testing framework
-
-## Features
-
-- **Fast searches** - Queries the IMDb API with optimized endpoints
-- **Flexible limits** - Display 1, 5, 10, or more results
-- **Error handling** - Clear error messages for connection issues, timeouts, and API errors
-- **Beautiful formatting** - Human-readable output with contextual information
 
 ## Testing
 
