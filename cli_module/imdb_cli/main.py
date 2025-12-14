@@ -132,7 +132,8 @@ def movie(title, limit):
     completeness, and relevance.
 
     \b
-    Examples:
+    Examples
+    ----------
       imdb movie "Shrek"
       imdb movie "Matrix" --limit 10
       imdb movie --limit 10 "Matrix"

@@ -1,0 +1,213 @@
+## IMDB CLI
+A command-line interface built with Click for querying movies and actors from the IMDb Data API. Simple, fast, and beautifully formatted.
+
+## Installation
+
+### Prerequisites
+
+- Python 3.11 or higher
+- The other modules should have been launched. Check main Readme for more info.
+
+### Recommended: Install as a Python Package with uv
+
+#### Step 1: Install uv (if not already installed)
+
+`uv` is a fast, modern Python package manager. Install it:
+
+```bash
+# On macOS or Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# On Windows (PowerShell)
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+# Or via package managers:
+# macOS: brew install uv
+# Ubuntu/Debian: curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Verify installation:
+```bash
+uv --version
+```
+
+#### Step 2: Create Virtual Environment with uv
+
+From the project root directory:
+
+```bash
+cd /path/to/imdb-project/cli_module
+
+# Create virtual environment
+uv venv .venv
+```
+
+#### Step 3: Activate Virtual Environment
+
+```bash
+# On macOS/Linux
+source .venv/bin/activate
+
+# On Windows (PowerShell)
+.venv\Scripts\Activate.ps1
+
+# On Windows (Command Prompt)
+.venv\Scripts\activate.bat
+```
+
+You should see `(.venv)` prefix in your terminal prompt when activated.
+
+#### Step 4: Install the CLI Package
+
+With the virtual environment activated:
+
+```bash
+# Method 1: Using uv (Recommended - faster)
+uv pip install -e ./cli_module/
+
+# Method 2: Using standard pip
+python -m pip install -e ./cli_module/
+```
+
+#### Step 5: Verify Installation
+
+```bash
+imdb --help
+```
+
+You should see the CLI help message with available commands.
+
+### Alternative Method 1: Using pip directly (Without uv)
+
+If you prefer to use only pip:
+
+```bash
+cd /path/to/imdb-project
+
+# Create virtual environment with Python
+python -m venv .venv
+
+# Activate it
+source .venv/bin/activate  # macOS/Linux
+# or
+.venv\Scripts\activate.bat  # Windows
+
+# Install package
+python -m pip install -e ./cli_module/
+```
+
+### Alternative Method 2: Run without Installation
+
+Execute directly from  cli_module/imdb_cli/  (no installation needed):
+
+```bash
+cd imdb-project/cli_module
+# with venv active
+uv run src/imdb_cli/main.py actor "Tom Hanks"
+# or: python -m imdb_cli.main actor "Tom Hanks"
+```
+
+### Configuration
+
+You need to have the .env file properly configured in the root of the global project as it is said in the main README.md
+## Usage
+
+The CLI provides two main commands for searching the IMDb dataset:
+
+### Search for Actors
+
+```bash
+imdb actor "Tom Hanks"
+```
+
+**Options:**
+- `--limit` (optional): Number of results to display (default: 1)
+
+**Examples:**
+```bash
+# Show first matching actor
+imdb actor "Bruce Lee"
+# Response
+Found 1 actor.
+Showing 1 actor.
+1. Bruce Lee was born in 1940 and he was an actor, a writer, and in miscellaneous roles.
+
+# Show top 5 results
+imdb actor "Robert" --limit 5
+# Response
+Found 4610 actors.
+Showing 5 actors.
+1. Robert P. was born in 1982 and he is an actor.
+2. Robert An was born in 2003 and he is an actor.
+3. Robert Ray was born in 1978 and he was in archive footage.
+4. Robert Joy was born in 1951 and he is an actor, a writer, and a composer.
+5. Robert Lee was born in 1957 and he is in miscellaneous roles, an actor, and in archive footage.
+```
+
+**Output includes:**
+- Actor name
+- Birth year
+- Life status with tense: “is” (alive) or “was” (deceased) 
+- Primary professions
+
+### Search for Movies
+
+```bash
+imdb movie "Shrek"
+```
+
+**Options:**
+- `--limit` (optional): Number of results to display (default: 1)
+
+**Examples:**
+```bash
+# Show first matching movie
+imdb movie "Iron Man"
+# Response
+Found 553 movies.
+Showing 1 movie.
+1. Iron Man, originally titled 'Iron Man', is an Action, a Crime, and a Drama.
+
+# Show top 10 results
+imdb movie "Blacksmith Scene" --limit 10
+imdb movie --limit 10 "Blacksmith Scene"
+Found 3 movies.
+Showing 3 movies.
+1. Blacksmith Scene, originally titled 'Blacksmith Scene', is a Short.
+2. Blacksmith Scene, originally titled 'Les forgerons', is a Documentary and a Short.
+3. Blacksmith Rates 9 Forging Scenes from Movies and TV, originally titled 'Blacksmith Rates 9 Forging Scenes from Movies and TV', is a Documentary and a Short.
+```
+
+**Output includes:**
+- Movie title
+- Original title
+- Genres
+
+### Get Help
+
+```bash
+imdb --help
+imdb actor --help
+imdb movie --help
+```
+
+## Requirements
+
+The CLI requires the following Python packages (automatically installed with pip):
+
+- `click>=8.3.1` - Command-line interface creation
+- `pydantic>=2.12.5` - Data validation
+- `python-dotenv>=1.0` - Environment variable management
+- `requests>=2.32.5` - HTTP requests
+
+## Features
+
+- **Fast searches** - Queries the IMDb API with optimized endpoints
+- **Flexible limits** - Display 1, 5, 10, or more results
+- **Error handling** - Clear error messages for connection issues, timeouts, and API errors
+- **Beautiful formatting** - Human-readable output with contextual information
+
+## Troubleshooting
+
+- **Connection error**: Ensure the IMDb API server is running at the configured URL
+- **Module not found**: Reinstall the package with `pip3 install -e ./cli_module/`
