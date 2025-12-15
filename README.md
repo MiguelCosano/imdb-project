@@ -17,7 +17,6 @@ The system is containerized with Docker and can be fully orchestrated with a sin
 
 ![System Architecture](docs/architecture.png)
 
-
 ### Project Structure
 
 ```
@@ -45,12 +44,11 @@ The system is containerized with Docker and can be fully orchestrated with a sin
 
 ### Prerequisites
 
-- Docker and Docker Compose
-- Make
+- Docker and Docker Compose (running)
+- Linux based system
 - Python 3.11+ (for CLI usage without Docker)
-- PostgreSQL client tools (optional, for direct database access)
 
-The complete system can be started with a single command:
+You can start the entire system with a single command, executed from the project root directory:
 
 ```bash
 make up
@@ -59,22 +57,37 @@ make up
 This will:
 1. Build all Docker images
 2. Start PostgreSQL database
-3. Download and process IMDb datasets (actors and movies)
-4. Create full-text search indexes for optimal performance
+3. Download and process the IMDb datasets (actors and movies) on first execution or when the remote files have changed.
+4. Create full-text search indexes for optimal performance when new data is added
 5. Start the FastAPI server
 
-Once complete, the next step is to set up the CLI (example with uv more information bellow or in cli_module `README`):
+Once complete, the next step is to set up the CLI:
+
+#### Install uv
 
 ```bash
-# Install uv
-brew install uv
+# macOS/Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
+# Or via Homebrew (macOS)
+brew install uv
+```
+
+#### Create virtual environment, sync dependencies and install it as an editable package
+```bash
 # Change to cli module
 cd ./cli_module/
 
-# Create virtual environment, sync dependencies and install it as an editable package
 # (uv sync creates .venv automatically if it doesn't exist)
 uv sync
+
+# Activate the virtual environment
+source ./.venv/bin/activate
+```
+
+#### Test the CLI
+```bash
+imdb --help
 ```
 
 ## Makefile Commands
@@ -90,6 +103,23 @@ uv sync
 | `make test-api` | Test if API is responding |
 | `make db-index` | Create full-text search indexes |
 | `make db-clean` | Delete all data from database tables |
+
+## Database Schema
+
+#### actors table
+- `nconst` (TEXT, PK) - IMDb person ID
+- `primary_name` (TEXT) - Actor/director name
+- `birth_year` (SMALLINT) - Birth year
+- `death_year` (SMALLINT) - Death year (nullable)
+- `primary_profession` (TEXT) - Professions
+- `search_vector` (tsvector) - Full-text search index
+
+#### movies table
+- `tconst` (TEXT, PK) - IMDb title ID
+- `primary_title` (TEXT) - Movie title
+- `original_title` (TEXT) - Original language title
+- `genres` (TEXT) - Comma-separated genres
+- `search_vector` (tsvector) - Full-text search index
 
 ## Module Documentation
 
@@ -162,37 +192,10 @@ API_EXPOSED_PORTS=8000:8000
 # Ingest
 INGEST_CONTAINER_NAME=imdb-ingest
 
-# Connection strings. Change "db" for "localhost" for local running
-DATABASE_URL=postgresql://imdb_user:imdb_pass@db:5432/imdb 
+# Connection strings
+DATABASE_URL=postgresql://imdb_user:imdb_pass@db:5432/imdb Change "db" for "localhost" for local running
 API_DATABASE_URL=postgresql+asyncpg://imdb_user:imdb_pass@db:5432/imdb
 ```
-
-## Architecture Details
-
-### Data Flow
-
-1. **Extract**: IMDb datasets are streamed from `datasets.imdbws.com`
-2. **Transform**: Data is cleaned, validated, and columns are renamed to match database schema
-3. **Load**: Optimized bulk insertion into PostgreSQL using COPY command
-4. **Index**: Full-text search indexes created for fast queries
-5. **Serve**: API and CLI provide access to the data
-
-### Database Schema
-
-#### actors table
-- `nconst` (TEXT, PK) - IMDb person ID
-- `primary_name` (TEXT) - Actor/director name
-- `birth_year` (SMALLINT) - Birth year
-- `death_year` (SMALLINT) - Death year (nullable)
-- `primary_profession` (TEXT) - Professions
-- `search_vector` (tsvector) - Full-text search index
-
-#### movies table
-- `tconst` (TEXT, PK) - IMDb title ID
-- `primary_title` (TEXT) - Movie title
-- `original_title` (TEXT) - Original language title
-- `genres` (TEXT) - Comma-separated genres
-- `search_vector` (tsvector) - Full-text search index
 
 ## Troubleshooting
 
@@ -233,10 +236,3 @@ API_DATABASE_URL=postgresql+asyncpg://imdb_user:imdb_pass@db:5432/imdb
 | CLI | Python Click, Requests |
 | Orchestration | Docker, Docker Compose |
 | Build/Tasks | Make |
-
-## Module-Specific Documentation
-
-Each module has its own detailed README:
-- [ingest_module/README.md](ingest_module/README.md) - ETL pipeline documentation
-- [server_module/README.md](server_module/README.md) - API server documentation
-- [cli_module/README.md](cli_module/README.md) - CLI tool documentation

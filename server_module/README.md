@@ -38,7 +38,7 @@ server_module/
 │       ├── schemas.py      # Pydantic validation schemas
 │       ├── repository.py   # Database queries
 │       ├── service.py      # Business logic
-│       ├── routes.py       # API endpoints
+│       └── routes.py       # API endpoints
 ├── tests/
 │   ├── __init__.py
 │   ├── test_actors.py      # Actor repository unit tests
@@ -80,31 +80,13 @@ For the search, in an initial instance we chose to query directly on the column 
 
 ## Installation
 
-### Recommended: Start with Docker Compose
-
-The best and easiest way to run the server is with Docker Compose from the project root:
-
-```bash
-cd /path/to/imdb-project
-
-# Start the entire system (PostgreSQL + ETL + API server)
-make up
-```
-
-The API will be available at `http://127.0.0.1:8000/` after the ETL finishes.
-
-**Benefits:**
-- No local PostgreSQL installation required
-- Database automatically configured
-- Consistent environment across machines
-
 ### Prerequisites (for local development)
 
 - Python 3.11 or higher
 - PostgreSQL database running with Docker (see main `README.md` for more info)
 - Environment variables configured (see Configuration section)
 
-### Option 1: Local Setup with uv (Recommended for Development)
+### Local Setup with uv
 
 uv is a fast, modern Python package manager.
 
@@ -114,81 +96,35 @@ uv is a fast, modern Python package manager.
 # macOS/Linux
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Windows (PowerShell)
-powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
-
 # Or via Homebrew (macOS)
 brew install uv
 ```
 
 Verify: `uv --version`
 
-#### Step 2: Create Virtual Environment
+#### Step 2: Create virtual environment and sync dependencies 
 
 ```bash
-cd /path/to/imdb-project
-uv venv .venv
-source .venv/bin/activate  # macOS/Linux
-# or
-.venv\Scripts\activate.bat  # Windows
+cd /path/to/server_module
+uv sync
+
+# Activate virtual environment
+source ./.venv/bin/activate
 ```
 
-#### Step 3: Install Server Module
+#### Step 3: Launch database
 
 ```bash
-uv pip install -e ./server_module/
+docker-compose up -db -d
 ```
 
-#### Step 4: Configure Database
-
-In the `.env` file in the root of the project, configure the API database URL:
-
-```env
-API_DATABASE_URL=postgresql+asyncpg://imdb_user:imdb_pass@localhost:5432/imdb
-```
-
-#### Step 5: Run the Server
+#### Step 4: Run the Server
 
 ```bash
 uvicorn main:app --reload
 ```
 
 The API will be available at `http://127.0.0.1:8000/`
-
-### Option 2: Local Setup with pip
-
-If you prefer standard pip:
-
-#### Step 1: Create Virtual Environment
-
-```bash
-cd /path/to/imdb-project
-python -m venv .venv
-source .venv/bin/activate  # macOS/Linux
-# or
-.venv\Scripts\activate.bat  # Windows
-```
-
-#### Step 2: Install Server Module
-
-```bash
-python -m pip install -e ./server_module/
-```
-
-#### Step 3: Configure Database
-
-In the `.env` file in the root of the project, update:
-
-```env
-API_DATABASE_URL=postgresql+asyncpg://imdb_user:imdb_pass@localhost:5432/imdb
-```
-
-#### Step 4: Run the Server
-
-```bash
-cd server_module
-uvicorn main:app --reload
-```
 
 ## Interactive Documentation
 

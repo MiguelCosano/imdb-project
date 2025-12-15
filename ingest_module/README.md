@@ -37,7 +37,10 @@ ingest_module/
 │   └── metadata.json       # ETag storage for files
 ├── test/
 │   ├── __init__.py
-│   └── __pycache__/
+│   ├── test_extractor.py    # Extractor module unit tests
+│   ├── test_transformer.py  # Transformer module unit tests
+│   ├── test_loader.py       # Loader module unit tests
+│   └── test_metadata.py     # Metadata management unit tests
 ├── Dockerfile              # Container configuration
 ├── pyproject.toml          # Dependencies and metadata
 └── README.md               # This file
@@ -92,9 +95,7 @@ As a result, the entire pipeline starts executing from the beginning without ove
 
 To clean the data, only the columns that are actually used were selected, and rows containing `NULL` values in relevant fields were filtered out. Additionally, in the case of actors, the `deathYear` column was transformed into an `is_dead` field to correctly indicate the actor’s status when retrieving their data.
 
-Based on IMDb documentation, the `\N` values were mapped to `NULL` during data extraction. Finally, the columns were renamed to follow the database naming conventions before being inserted into the database.
-
-
+Based on IMDb documentation, the `\N` values were mapped to `NULL` during data ingestion. Finally, the columns were renamed to follow the database naming conventions before being inserted into the database.
 
 ## Installation
 
@@ -104,7 +105,7 @@ Based on IMDb documentation, the `\N` values were mapped to `NULL` during data e
 - PostgreSQL database running
 - Environment variables configured (see Configuration section)
 
-### Option 1: Setup with uv (Recommended)
+### Setup with uv
 
 uv is a fast, modern Python package manager:
 
@@ -113,9 +114,6 @@ uv is a fast, modern Python package manager:
 ```bash
 # macOS/Linux
 curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Windows (PowerShell)
-powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 
 # Or via Homebrew (macOS)
 brew install uv
@@ -126,45 +124,29 @@ Verify: `uv --version`
 #### Step 2: Create Virtual Environment
 
 ```bash
-cd /path/to/imdb-project
-uv venv .venv
-source .venv/bin/activate  # macOS/Linux
-# or
-.venv\Scripts\activate.bat  # Windows
+cd /path/to/ingest_module
 ```
 
-#### Step 3: Install Ingest Module
+#### Step 3: Create virtual environment and sync dependencies
 
 ```bash
-uv pip install -e ./ingest_module/
+uv sync
+
+# Activate virtual environment
+source ./.venv/bin/activate
 ```
 
-### Option 2: Setup with Python (Standard)
+#### Step 4: Launch the database
 
-If you prefer standard pip:
+Make sure to have changed the "db" for "localhost" in the main .env for the `DATABASE_URL`
+```bash
+docker-compose up db -d
+```
 
-#### Step 1: Create Virtual Environment
+#### Step 4: Launch ETL process (will not add the improved columns and indexes)
 
 ```bash
-cd /path/to/imdb-project
-python -m venv .venv
-source .venv/bin/activate  # macOS/Linux
-# or
-.venv\Scripts\activate.bat  # Windows
-```
-
-#### Step 2: Install Ingest Module
-
-```bash
-python -m pip install -e ./ingest_module/
-```
-
-## Configuration
-
-Create a `.env` file in the project root:
-
-```env
-DATABASE_URL=postgresql://user:password@localhost:5432/imdb
+uv run main.py
 ```
 
 ### Dataset Configuration
@@ -183,7 +165,7 @@ Each configuration specifies:
 
 ## Usage
 
-### Run the Complete Pipeline
+### Run the Complete Pipeline (NOT WITH TS_VECTOR AND INDEX!)
 
 ```bash
 python main.py
@@ -211,6 +193,9 @@ pytest test/test_extractor.py
 pytest test/test_transformer.py
 pytest test/test_loader.py
 pytest test/test_metadata.py
+
+# Run with coverage
+pytest --cov=extract,transform,load,utils test/
 ```
 
 ### Test Files Overview
@@ -265,7 +250,7 @@ pytest test/test_metadata.py
 
 ## Database Schema
 
-The pipeline creates two main tables (the search_vector column will be added later):
+The pipeline creates two main tables:
 
 ### actors
 - `nconst` (TEXT, PRIMARY KEY) - IMDb person ID
@@ -273,12 +258,14 @@ The pipeline creates two main tables (the search_vector column will be added lat
 - `birth_year` (SMALLINT) - Birth year
 - `death_year` (SMALLINT) - Death year (nullable)
 - `primary_profession` (TEXT) - Professions
+- `search_vector` (TSVECTOR) - Full-text search index
 
 ### movies
 - `tconst` (TEXT, PRIMARY KEY) - IMDb title ID
 - `primary_title` (TEXT) - Movie title
 - `original_title` (TEXT) - Original language title
 - `genres` (TEXT) - Comma-separated genres
+- `search_vector` (TSVECTOR) - Full-text search index
 
 ## Docker
 

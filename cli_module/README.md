@@ -17,38 +17,23 @@ cli_module/
 │   ├── __init__.py
 │   ├── formatters.py       # Output formatting utilities
 │   ├── main.py             # CLI entry point and commands
-│   ├── models.py           # Pydantic models for API responses
-│   └── __pycache__/
+│   └── models.py           # Pydantic models for API responses
 ├── test/
 │   ├── __init__.py
 │   ├── test_cli_actor.py   # Actor command unit tests
 │   ├── test_cli_movie.py   # Movie command unit tests
-│   ├── test_formatter.py   # Formatter utility tests
-│   └── __pycache__/
+│   └── test_formatter.py   # Formatter utility tests
 ├── pyproject.toml          # Dependencies and metadata
-├── uv.lock                 # Dependency lock file
-└── __pycache__/
+└── uv.lock                 # Dependency lock file
 ```
 
 ## Installation
 
-### Prerequisites
-
-- Python 3.11 or higher
-- The other modules should have been launched. Check main README for more info.
-
-### Option 1: Setup with uv (Recommended)
-
-uv is a fast, modern Python package manager.
-
-#### Step 1: Install uv (if not already installed)
+### Step 1: Install uv (if not already installed)
 
 ```bash
 # macOS/Linux
 curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Windows (PowerShell)
-powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 
 # Or via Homebrew (macOS)
 brew install uv
@@ -56,54 +41,21 @@ brew install uv
 
 Verify: `uv --version`
 
-#### Step 2: Create Virtual Environment
+### Step 2: Create Virtual Environment, sync Dependencies and install it as an editable package 
 
 ```bash
-cd /path/to/imdb-project
-uv venv .venv
-source .venv/bin/activate  # macOS/Linux
-# or
-.venv\Scripts\activate.bat  # Windows
+cd /path/to/cli_module
+uv sync
+
+# Activate virtual environment
+source ./.venv/bin/activate
 ```
 
-#### Step 3: Install CLI Module
-
-```bash
-uv pip install -e ./cli_module/
-```
-
-#### Step 4: Verify Installation
+### Step 4: Verify Installation
 
 ```bash
 imdb --help
 ```
-
-### Option 2: Setup with Python (Standard)
-
-If you prefer standard pip:
-
-#### Step 1: Create Virtual Environment
-
-```bash
-cd /path/to/imdb-project
-python -m venv .venv
-source .venv/bin/activate  # macOS/Linux
-# or
-.venv\Scripts\activate.bat  # Windows
-```
-
-#### Step 2: Install CLI Module
-
-```bash
-python -m pip install -e ./cli_module/
-```
-
-#### Step 3: Verify Installation
-
-```bash
-imdb --help
-```
-
 
 ### Configuration
 
